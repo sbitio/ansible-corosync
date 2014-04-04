@@ -1,0 +1,145 @@
+---
+corosync_service_enabled: yes
+corosync_service_state: started
+corosync_pkg_state: present
+
+# Variables for corosync.conf
+#
+# Grouped by top level directives (totem, logging, etc).
+#
+# Commented out variables denote parameters and the default value used by
+# corosync. Some variables have no a static default value. In this case no
+# value is denoted.
+#
+# Note: on|off|yes|no are bools in yaml - http://yaml.org/type/bool.html
+# These values must be quoted to present expansion to True / False.
+
+### totem {
+
+#corosync_token: 1000
+
+#corosync_token_retransmits_before_loss_const: 4
+
+#corosync_join: 50
+
+#corosync_consensus: 1200
+
+# Options: ykd, none
+#corosync_vsftype: ykd
+
+#corosync_max_messages: 17
+
+# Options: 'yes', 'no'
+#corosync_clear_node_high_bit: 'no'
+
+# Options: none, active, passive
+#corosync_rrp_mode:
+
+# Options: 'on', 'off'
+#corosync_secauth: on
+
+#corosync_threads: 0
+
+# Options: udp, udpu, iba
+#corosync_transport: udp
+
+## interface {
+
+# By default one interface is created, based on the values of 
+# ansible_default_ipv4 fact. If you want to define several interfaces or
+# just one but not based on ansible_default_ipv4, see corosync_interfaces below.
+
+# Those four parameters can be provided as defaults for any interface.
+
+# Options: 'yes', 'no'
+#corosync_default_broadcast: 'no'
+
+#corosync_default_mcastaddr:
+
+corosync_default_mcastport: 5405
+
+# Options: 0..255
+#corosync_default_ttl: 1
+
+# Ansible group of members for the default interface.
+# This is ignored if corosync_interfaces is provided.
+# Note: this only make sense to corosync when transport=udpu
+#corosync_default_members:
+
+# List of interfaces.
+# If broadcast, mcastaddrm, mcastport or ttl is not provided, default values
+# declared above will be used when needed.
+#corosync_interfaces:
+# - bindnetaddr: 
+#   broadcast:
+#   mcastaddr:
+#   mcastport:
+#   ttl:
+#   members:
+#     - ip1
+#     - ip2
+# - bindnetaddr: 
+#   broadcast:
+#   mcastaddr:
+#   mcastport:
+#   ttl:
+#   members:
+#     - ip1
+#     - ip2
+
+
+
+## End of interface {} parameters.
+
+### End of totem {} parameters.
+
+
+### logging {
+
+# Options: 'on', 'off'
+#corosync_timestamp: 'off'
+
+# Options: 'on', 'off'
+#corosync_fileline: 'off'
+
+# Options: 'on', 'off'
+#corosync_function_name: 'off'
+
+# Options: 'yes', 'no'
+#corosync_to_logfile: 'no'
+
+#corosync_logfile:
+
+# Options: alert, crit, debug, emerg, err, info, notice, warning.
+#corosync_logfile_priority: info
+
+# Options: 'yes', 'no'
+#corosync_to_stderr: 'yes'
+
+# Options: 'yes', 'no'
+#corosync_to_syslog: 'yes'
+
+# Options: daemon, local0, local1, local2, local3, local4, local5, local6 & local7.
+#corosync_syslog_facility: daemon
+
+# Options: alert, crit, debug, emerg, err, info, notice, warning.
+#corosync_syslog_priority: info
+
+# Options: 'on', 'off', trace
+# corosync_debug: 'off'
+
+# Options: enter|leave|trace1|trace2|trace3|...
+# corosync_tags: none
+
+# logger_subsys entries.
+#
+# Note:
+#  - `subsys` parameter is mandatory.
+#  - `timestamp`, `fileline` and `function_name` are not permitted.
+#  - Any other logging parameter is optional.
+corosync_logger_subsys:
+ - subsys: AMF
+   debug: 'off'
+   tags: enter|leave|trace1|trace2|trace3|trace4|trace6
+
+### End of logging {} parameters.

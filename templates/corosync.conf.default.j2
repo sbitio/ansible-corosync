@@ -1,0 +1,164 @@
+# {{ ansible_managed }}
+
+compatibility: whitetank
+
+totem {
+  version: 2
+{% if corosync_token is defined %}
+  token: {{ corosync_token }}
+{% endif %}
+{% if corosync_token_retransmits_before_loss_const is defined %}
+  token_retransmits_before_loss_const: {{ token_retransmits_before_loss_const }}
+{% endif %}
+{% if corosync_join is defined %}
+  join: {{ corosync_join }}
+{% endif %}
+{% if corosync_consensus is defined %}
+  consensus: {{ corosync_consensus }}
+{% endif %}
+{% if corosync_vsftype is defined %}
+  vsftype: {{ corosync_vsftype }}
+{% endif %}
+{% if corosync_max_messages is defined %}
+  max_messages: {{ corosync_max_messages }}
+{% endif %}
+{% if corosync_clear_node_high_bit is defined %}
+  clear_node_high_bit: {{ corosync_clear_node_high_bit }}
+{% endif %}
+{% if corosync_rrp_mode is defined %}
+  rrp_mode: {{ corosync_rrp_mode }}
+{% endif %}
+{% if corosync_secauth is defined %}
+  secauth: {{ corosync_secauth }}
+{% endif %}
+{% if corosync_threads is defined %}
+  threads: {{ corosync_threads }}
+{% endif %}
+{% if corosync_transport is defined %}
+  transport: {{ corosync_transport }}
+{% endif %}
+
+{# If there're defined interfaces, prepare defaults dict and rings counter #}
+{% if corosync_interfaces is defined %}
+  {% set ringnumber = 0 %}
+  {% set defaults = {} %}
+  {% if corosync_default_broadcast is defined -%}
+    {% do defaults.update({'broadcast': corosync_default_broadcast}) -%}
+  {% endif %}
+  {% if corosync_default_mcastaddr is defined -%}
+    {% do defaults.update({'mcastaddr': corosync_default_mcastaddr}) -%}
+  {% endif %}
+  {% if corosync_default_mcastaddr is defined -%}
+    {% do defaults.update({'mcastaddr': corosync_default_mcastaddr}) -%}
+  {% endif %}
+  {% do defaults.update({'mcastport': corosync_default_mcastport}) -%}
+  {% if corosync_default_ttl is defined -%}
+    {% do defaults.update({'ttl': corosync_default_ttl}) -%}
+  {% endif %}
+{% endif %}
+
+{% for interface in corosync_interfaces -%}
+  {% do interface.update(defaults) -%}
+  interface {
+    ringnumber: {{ ringnumber }}
+    bindnetaddr: {{ interface.bindnetaddr }}
+    {% if interface.broadcast is defined and interface.broadcast == 'yes' -%}
+    broadcast: yes
+    {% elif interface.mcastaddr is defined -%}
+    mcastaddr: {{ interface.mcastaddr }}
+    {% endif -%}
+    {% if interface.mcastport is defined -%}
+    mcastport: {{ interface.mcastport }}
+    {% endif -%}
+    {% if interface.ttl is defined -%}
+    ttl: {{ interface.ttl }}
+    {% endif -%}
+    {% if corosync_transport is defined and corosync_transport == 'udpu' -%}
+      {% for memberaddr in interface.members -%}
+    member {
+      memberaddr: {{ memberaddr }}
+    }
+      {% endfor -%}
+    {% endif %}
+  }
+  {% set ringnumber = ringnumber + 1 -%}
+{% else -%}
+  interface {
+    ringnumber: 0
+    bindnetaddr: {{ ansible_default_ipv4.network }}
+  {% if corosync_default_broadcast is defined and corosync_default_broadcast == 'yes' -%}
+    broadcast: yes
+  {% elif corosync_mcastaddr is defined -%}
+    mcastaddr: {{ corosync_default_mcastaddr }}
+    {% if corosync_mcastport is defined -%}
+    mcastport: {{ corosync_default_mcastport }}
+    {% endif -%}
+  {% endif -%}
+  {% if corosync_default_ttl is defined -%}
+    ttl: {{ corosync_default_ttl }}
+  {% endif -%}
+  {% if corosync_transport is defined and corosync_transport == 'udpu' -%}
+    {% for host in groups[corosync_default_members] -%}
+    member {
+      memberaddr: {{ hostvars[host]['ansible_default_ipv4'].address }}
+    }
+    {% endfor -%}
+  {% endif -%}
+  }
+{% endfor -%}
+} {# end of totem {} #}
+
+logging {
+{% if corosync_timestamp is defined %}
+  timestamp:       {{ corosync_timestamp }}
+{% endif %}
+{% if corosync_fileline is defined %}
+  fileline:        {{ corosync_fileline }}
+{% endif %}
+{% if corosync_function_name is defined %}
+  function_name:   {{ corosync_function_name }}
+{% endif %}
+{% if corosync_to_stderr is defined %}
+  to_stderr:       {{ corosync_to_stderr }}
+{% endif %}
+{% if corosync_to_logfile is defined %}
+  to_logfile:     {{ corosync_to_logfile }}
+{% endif %}
+{% if corosync_logfile is defined %}
+  logfile:        {{ corosync_logfile }}
+{% endif %}
+{% if corosync_logfile_priority is defined %}
+  logfile_priority:{{ corosync_logfile_priority }}
+{% endif %}
+{% if corosync_to_syslog is defined %}
+  to_syslog:       {{ corosync_to_syslog }}
+{% endif %}
+{% if corosync_syslog_facility is defined %}
+  syslog_facility: {{ corosync_syslog_facility }}
+{% endif %}
+{% if corosync_syslog_priority is defined %}
+  syslog_priority: {{ corosync_syslog_priority }}
+{% endif %}
+{% if corosync_debug is defined %}
+  debug:           {{ corosync_debug }}
+{% endif %}
+{% if corosync_tags is defined %}
+  tags:            {{ corosync_tags }}
+{% endif %}
+{% for logger_subsys in corosync_logger_subsys %}
+  logger_subsys {
+  {% for key, value in logger_subsys.iteritems() %}
+    {{ key }}: {{ value }}
+  {% endfor %}
+  }
+{% endfor %}
+}
+
+amf {
+  mode: disabled
+}
+
+aisexec {
+  user:  root
+  group: root
+}

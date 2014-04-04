@@ -1,0 +1,24 @@
+---
+# tasks file for corosync
+
+- name: OS specific varibles
+  include_vars: "{{ ansible_os_family }}.yml"
+  tags:
+    - corosync
+    - setup
+    - service
+    - config
+
+# Debian(setup) specific tasks
+- include: setup-Debian.yml
+  when: "ansible_os_family == 'Debian'"
+
+# RedHat(setup) specific tasks
+- include: setup-RedHat.yml
+  when: "ansible_os_family == 'RedHat'"
+
+# Common configuration tasks tasks
+- include: config.yml
+
+# Common service tasks
+- include: service.yml

@@ -1,0 +1,10 @@
+---
+
+- name: Ensure service.d/pacemaker #TODO# change to a puppet define() equivalent construct
+  template: src=corosync-service.d.j2 dest=/etc/corosync/service.d/{{service}} backup=no owner=root group=root mode=0644
+  tags:
+    - corosync
+    - config
+  notify:
+    - restart corosync
+

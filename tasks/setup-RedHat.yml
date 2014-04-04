@@ -1,0 +1,8 @@
+---
+- name: Ensure yum packages
+  yum: pkg={{ item }} state={{ corosync_pkg_state }}
+  tags:
+    - corosync
+    - setup
+  with_items: corosync_packages
+
