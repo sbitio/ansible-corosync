@@ -7,12 +7,12 @@ corosync_pkg_state: present
 #
 # Grouped by top level directives (totem, logging, etc).
 #
-# Commented out variables denote parameters and the default value used by
-# corosync. Some variables have no a static default value. In this case no
-# value is denoted.
+# Variables commented out represent corosync defaults. Default value is denoted
+# for your convenience. Some variables have no a static default value. In this
+# case no value is shown.
 #
 # Note: on|off|yes|no are bools in yaml - http://yaml.org/type/bool.html
-# These values must be quoted to present expansion to True / False.
+# These values must be quoted to prevent expansion to True / False.
 
 ### totem {
 
@@ -45,7 +45,7 @@ corosync_pkg_state: present
 
 ## interface {
 
-# By default one interface is created, based on the values of 
+# By default one interface is created, based on the values of
 # ansible_default_ipv4 fact. If you want to define several interfaces or
 # just one but not based on ansible_default_ipv4, see corosync_interfaces below.
 
@@ -70,7 +70,7 @@ corosync_default_mcastport: 5405
 # If broadcast, mcastaddrm, mcastport or ttl is not provided, default values
 # declared above will be used when needed.
 #corosync_interfaces:
-# - bindnetaddr: 
+# - bindnetaddr:
 #   broadcast:
 #   mcastaddr:
 #   mcastport:
@@ -78,7 +78,7 @@ corosync_default_mcastport: 5405
 #   members:
 #     - ip1
 #     - ip2
-# - bindnetaddr: 
+# - bindnetaddr:
 #   broadcast:
 #   mcastaddr:
 #   mcastport:
