@@ -1,0 +1,15 @@
+---
+galaxy_info:
+  author: Jonathan Araña Cruz
+  description: Configure corosync/pacemaker cluster.
+  company: SB IT Media, S.L.
+  license: license BSD
+  min_ansible_version: 1.5
+  platforms:
+  - name: EL
+    versions:
+    - 6
+  categories:
+  - clustering
+dependencies: []
+
