@@ -19,7 +19,7 @@ Role Variables
 
 Almost all corosync variables are supported. If you find anything missing please post an issue.
 
-Look `defaults/main.yml` for detailed reference.
+Look [`defaults/main.yml`](defaults/main.yml) for detailed reference.
 
 License
 -------
