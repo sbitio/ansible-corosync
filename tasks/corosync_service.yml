@@ -1,7 +1,15 @@
 ---
 
-- name: Ensure service.d/pacemaker #TODO# change to a puppet define() equivalent construct
+- name: Ensure service.d/pacemaker
   template: src=corosync-service.d.j2 dest=/etc/corosync/service.d/{{service}} backup=no owner=root group=root mode=0644
+  tags:
+    - corosync
+    - config
+  notify:
+    - restart corosync
+
+- name: Ensure uidgid.d/pacemaker
+  template: src=corosync-uidgid.d.j2 dest=/etc/corosync/uidgid.d/{{service}} backup=no owner=root group=root mode=0644
   tags:
     - corosync
     - config

@@ -11,5 +11,6 @@
   notify:
     - restart corosync
 
-- name: Ensure pacemaker corosync service
-  include: corosync_service.yml service=pacemaker
+- name: Ensure pacemaker corosync service  #TODO# change to a construct equivalent to puppet define()
+  include: corosync_service.yml service=pacemaker user=root group=root
+

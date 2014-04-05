@@ -137,9 +137,9 @@ corosync_default_mcastport: 5405
 #  - `subsys` parameter is mandatory.
 #  - `timestamp`, `fileline` and `function_name` are not permitted.
 #  - Any other logging parameter is optional.
-corosync_logger_subsys:
- - subsys: AMF
-   debug: 'off'
-   tags: enter|leave|trace1|trace2|trace3|trace4|trace6
+#corosync_logger_subsys:
+# - subsys: AMF
+#   debug: 'off'
+#   tags: enter|leave|trace1|trace2|trace3|trace4|trace6
 
 ### End of logging {} parameters.

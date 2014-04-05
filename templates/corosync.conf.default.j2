@@ -40,98 +40,102 @@ totem {
 
 {# If there're defined interfaces, prepare defaults dict and rings counter #}
 {% if corosync_interfaces is defined %}
-  {% set ringnumber = 0 %}
-  {% set defaults = {} %}
-  {% if corosync_default_broadcast is defined -%}
-    {% do defaults.update({'broadcast': corosync_default_broadcast}) -%}
-  {% endif %}
-  {% if corosync_default_mcastaddr is defined -%}
-    {% do defaults.update({'mcastaddr': corosync_default_mcastaddr}) -%}
-  {% endif %}
-  {% if corosync_default_mcastaddr is defined -%}
-    {% do defaults.update({'mcastaddr': corosync_default_mcastaddr}) -%}
-  {% endif %}
-  {% do defaults.update({'mcastport': corosync_default_mcastport}) -%}
-  {% if corosync_default_ttl is defined -%}
-    {% do defaults.update({'ttl': corosync_default_ttl}) -%}
-  {% endif %}
+  {%- set ringnumber = 0 %}
+  {%- set defaults = {} %}
+  {%- if corosync_default_broadcast is defined %}
+    {%- do defaults.update({'broadcast': corosync_default_broadcast}) %}
+  {%- endif %}
+  {%- if corosync_default_mcastaddr is defined %}
+    {%- do defaults.update({'mcastaddr': corosync_default_mcastaddr}) %}
+  {%- endif %}
+  {%- if corosync_default_mcastaddr is defined %}
+    {%- do defaults.update({'mcastaddr': corosync_default_mcastaddr}) %}
+  {%- endif %}
+  {%- do defaults.update({'mcastport': corosync_default_mcastport}) %}
+  {%- if corosync_default_ttl is defined %}
+    {%- do defaults.update({'ttl': corosync_default_ttl}) %}
+  {%- endif %}
 {% endif %}
 
-{% for interface in corosync_interfaces -%}
-  {% do interface.update(defaults) -%}
+{%- for interface in corosync_interfaces %}
+{% do interface.update(defaults) %}
   interface {
     ringnumber: {{ ringnumber }}
     bindnetaddr: {{ interface.bindnetaddr }}
-    {% if interface.broadcast is defined and interface.broadcast == 'yes' -%}
+{% if interface.broadcast is defined and interface.broadcast == 'yes' %}
     broadcast: yes
-    {% elif interface.mcastaddr is defined -%}
+{% elif interface.mcastaddr is defined %}
     mcastaddr: {{ interface.mcastaddr }}
-    {% endif -%}
-    {% if interface.mcastport is defined -%}
+{% endif %}
+{% if interface.mcastport is defined %}
     mcastport: {{ interface.mcastport }}
-    {% endif -%}
-    {% if interface.ttl is defined -%}
+{% endif %}
+{% if interface.ttl is defined %}
     ttl: {{ interface.ttl }}
-    {% endif -%}
-    {% if corosync_transport is defined and corosync_transport == 'udpu' -%}
-      {% for memberaddr in interface.members -%}
+{%- endif %}
+{% if corosync_transport is defined and corosync_transport == 'udpu' %}
+  {%- for memberaddr in interface.members %}
+
     member {
       memberaddr: {{ memberaddr }}
     }
-      {% endfor -%}
-    {% endif %}
+  {%- endfor %}
+{% endif %}
+
   }
-  {% set ringnumber = ringnumber + 1 -%}
-{% else -%}
+{% set ringnumber = ringnumber + 1 %}
+{% else %}
   interface {
     ringnumber: 0
     bindnetaddr: {{ ansible_default_ipv4.network }}
-  {% if corosync_default_broadcast is defined and corosync_default_broadcast == 'yes' -%}
+{% if corosync_default_broadcast is defined and corosync_default_broadcast == 'yes' %}
     broadcast: yes
-  {% elif corosync_mcastaddr is defined -%}
+{% elif corosync_mcastaddr is defined %}
     mcastaddr: {{ corosync_default_mcastaddr }}
-    {% if corosync_mcastport is defined -%}
+{% endif %}
+{% if corosync_mcastport is defined %}
     mcastport: {{ corosync_default_mcastport }}
-    {% endif -%}
-  {% endif -%}
-  {% if corosync_default_ttl is defined -%}
+{% endif %}
+{% if corosync_default_ttl is defined %}
     ttl: {{ corosync_default_ttl }}
-  {% endif -%}
-  {% if corosync_transport is defined and corosync_transport == 'udpu' -%}
-    {% for host in groups[corosync_default_members] -%}
+{%- endif %}
+{% if corosync_transport is defined and corosync_transport == 'udpu' %}
+  {%- for host in groups[corosync_default_members] %}
+
     member {
       memberaddr: {{ hostvars[host]['ansible_default_ipv4'].address }}
     }
-    {% endfor -%}
-  {% endif -%}
+  {%- endfor %}
+{% endif %}
+
   }
-{% endfor -%}
-} {# end of totem {} #}
+{% endfor %}
+}
 
 logging {
 {% if corosync_timestamp is defined %}
-  timestamp:       {{ corosync_timestamp }}
+  timestamp: {{ corosync_timestamp }}
 {% endif %}
 {% if corosync_fileline is defined %}
-  fileline:        {{ corosync_fileline }}
+  fileline: {{ corosync_fileline }}
 {% endif %}
 {% if corosync_function_name is defined %}
-  function_name:   {{ corosync_function_name }}
+  function_name: {{ corosync_function_name }}
 {% endif %}
 {% if corosync_to_stderr is defined %}
-  to_stderr:       {{ corosync_to_stderr }}
+  to_stderr: {{ corosync_to_stderr }}
 {% endif %}
 {% if corosync_to_logfile is defined %}
-  to_logfile:     {{ corosync_to_logfile }}
+  to_logfile: {{ corosync_to_logfile }}
 {% endif %}
 {% if corosync_logfile is defined %}
-  logfile:        {{ corosync_logfile }}
+  logfile: {{ corosync_logfile }}
 {% endif %}
 {% if corosync_logfile_priority is defined %}
-  logfile_priority:{{ corosync_logfile_priority }}
+  logfile_priority: {{ corosync_logfile_priority }}
 {% endif %}
 {% if corosync_to_syslog is defined %}
-  to_syslog:       {{ corosync_to_syslog }}
+  to_syslog: {{ corosync_to_syslog }}
 {% endif %}
 {% if corosync_syslog_facility is defined %}
   syslog_facility: {{ corosync_syslog_facility }}
@@ -140,25 +144,26 @@ logging {
   syslog_priority: {{ corosync_syslog_priority }}
 {% endif %}
 {% if corosync_debug is defined %}
-  debug:           {{ corosync_debug }}
+  debug: {{ corosync_debug }}
 {% endif %}
 {% if corosync_tags is defined %}
-  tags:            {{ corosync_tags }}
+  tags: {{ corosync_tags }}
 {% endif %}
-{% for logger_subsys in corosync_logger_subsys %}
+{% if corosync_logger_subsys is defined %}
+{%- for logger_subsys in corosync_logger_subsys %}
+
   logger_subsys {
-  {% for key, value in logger_subsys.iteritems() %}
+  {%- for key, value in logger_subsys.iteritems() %}
+
     {{ key }}: {{ value }}
-  {% endfor %}
+  {%- endfor %}
+
   }
 {% endfor %}
+{% endif %}
 }
 
 amf {
   mode: disabled
 }
 
-aisexec {
-  user:  root
-  group: root
-}
