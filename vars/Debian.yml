@@ -1,0 +1,10 @@
+---
+corosync_packages:
+  - corosync
+  - pacemaker
+  - cman
+#TODO# which package provides those ones?
+#  - pcs
+#  - ccs
+  - resource-agents
+
