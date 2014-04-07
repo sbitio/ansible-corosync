@@ -1,9 +1,3 @@
 ---
 corosync_packages:
   - corosync
-  - pacemaker
-  - cman
-  - pcs
-  - ccs
-  - resource-agents
-

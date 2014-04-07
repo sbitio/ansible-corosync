@@ -1,0 +1,72 @@
+#!/usr/bin/python
+# -*- coding: utf-8 -*-
+
+def build_file(item, params):
+    tmpfd, temp_path = tempfile.mkstemp()
+    tmp = os.fdopen(tmpfd, 'w')
+
+    if item == 'service':
+        content = """
+service {
+  name: %(name)s
+  ver:  %(ver)s
+}
+""" % params
+    elif item == 'uidgid':
+        content = """
+uidgid {
+  uid: %(user)s
+  gid: %(group)s
+}
+""" % params
+
+    tmp.write(content)
+    tmp.close()
+    return temp_path
+
+def main():
+    module = AnsibleModule(
+        argument_spec = dict(
+            state     = dict(default='present', choices=['present', 'absent']),
+            name      = dict(required=True),
+            ver       = dict(required=True),
+            user      = dict(default='root'),
+            group     = dict(default='root'),
+        ),
+        supports_check_mode=True,
+    )
+
+    name  = module.params['name']
+    state = module.params['state']
+    paths = dict(
+        service = '/etc/corosync/service.d/%s' % name,
+        uidgid  = '/etc/corosync/uidgid.d/%s' % name,
+    )
+
+    if state == 'absent':
+        for path in paths.itervalues():
+            if not os.path.exists(path):
+                module.exit_json(path=path, changed=False)
+            else:
+                if not module.check_mode:
+                    os.unlink(service_path)
+                module.exit_json(path=path, changed=True)
+    else:
+        changed = False
+        for item, dest in paths.iteritems():
+            destmd5 = None
+            path = build_file(item, module.params)
+            pathmd5 = module.md5(path)
+            if os.path.exists(dest):
+                destmd5 = module.md5(dest)
+            if pathmd5 != destmd5:
+                changed = True
+                if not module.check_mode:
+                    shutil.copy(path, dest)
+            os.remove(path)
+        module.exit_json(changed=changed, msg='OK')
+
+# import module snippets
+from ansible.module_utils.basic import *
+main()
+
