@@ -9,7 +9,11 @@ It manage CentOS and Debian packages and configuration. No further testing has
 been done in Debian (yet). By the way, no CentOS specificity is present, so it
 may work on Debian and even other OSes.
 
-This role also provides a module to allow configuration of Corosync services. See example playbook below for details.
+This role also provides a module to allow configuration of Corosync services.
+See example playbook below for details.
+
+You may be also interested in Pacemaker configuration. Checkout
+[sbitmedia.pacemaker](https://galaxy.ansible.com/list#/roles/701).
 
 Requirements
 ------------
