@@ -3,16 +3,16 @@ Corosync
 
 Ansible role to configure Corosync.
 
-It has been developed on CentOS 6 with Corosync version 1.4.1.
+Developed on CentOS 6.5 with Corosync version 1.4.1.
 
 It manage CentOS and Debian packages and configuration. No further testing has
 been done in Debian (yet). By the way, no CentOS specificity is present, so it
 may work on Debian and even other OSes.
 
-This role also provides a module to allow configuration of Corosync services.
+This role also provides a [module](library/corosync_service) to allow configuration of Corosync services.
 See example playbook below for details.
 
-You may be also interested in Pacemaker configuration. Checkout
+You may also be interested in Pacemaker configuration. Checkout
 [sbitmedia.pacemaker](https://galaxy.ansible.com/list#/roles/701).
 
 Requirements
@@ -26,7 +26,7 @@ Role Variables
 Almost all Corosync variables are supported. If you find anything missing
 please post an issue.
 
-Look [`defaults/main.yml`](defaults/main.yml) for detailed reference.
+See [`defaults/main.yml`](defaults/main.yml) for detailed reference.
 
 Example Playbook
 ----------------
@@ -45,7 +45,7 @@ Configure Corosync and Pacemaker service:
 ```
 
 You can configure services explicitly from other roles or playbooks by using
-provided `corosync_service` module:
+ `corosync_service` module:
 
 ```yaml
 - name: 2nd test

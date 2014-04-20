@@ -1,7 +1,7 @@
 ---
 galaxy_info:
   author: Jonathan Araña Cruz
-  description: Configures corosync.
+  description: Configure Corosync.
   company: SB IT Media, S.L.
   license: license BSD
   min_ansible_version: 1.5
@@ -9,6 +9,9 @@ galaxy_info:
   - name: EL
     versions:
     - 6
+  - name: Debian
+    versions:
+    - wheezy
   categories:
   - clustering
 dependencies: []
