@@ -1,5 +1,22 @@
 ---
+
+- name: stop corosync services
+  service: name={{ item.name }} state=stopped
+  with_items: services
+  tags:
+   - corosync
+   - service
+
 - name: restart corosync
   service: name=corosync state=restarted
   tags:
    - corosync
+   - service
+
+- name: start corosync services
+  service: name={{ item.name }} state=started
+  with_items: services
+  tags:
+   - corosync
+   - service
+
