@@ -1,7 +1,7 @@
 ---
 galaxy_info:
   author: Jonathan Araña Cruz
-  description: Configure Corosync.
+  description: Manage Corosync. Provides a module to configure services.
   company: SB IT Media, S.L.
   license: license BSD
   min_ansible_version: 1.5
