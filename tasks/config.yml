@@ -2,7 +2,7 @@
 
 - name: Ensure corosync.conf
   template: src={{ item }} dest=/etc/corosync/corosync.conf backup=no owner=root group=root mode=0644
-  first_available_file:
+  with_first_found:
     - "corosync.conf.{{ ansible_os_family }}.j2"
     - "corosync.conf.default.j2"
   notify:
