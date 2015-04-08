@@ -8,7 +8,7 @@ totem {
   token: {{ corosync_token }}
 {% endif %}
 {% if corosync_token_retransmits_before_loss_const is defined %}
-  token_retransmits_before_loss_const: {{ token_retransmits_before_loss_const }}
+  token_retransmits_before_loss_const: {{ corosync_token_retransmits_before_loss_const }}
 {% endif %}
 {% if corosync_join is defined %}
   join: {{ corosync_join }}
